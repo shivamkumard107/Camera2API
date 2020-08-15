@@ -235,7 +235,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
             for(String cameraId : cameraManager.getCameraIdList()){
                 CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
                 if(cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
-                        CameraCharacteristics.LENS_FACING_FRONT){
+                        CameraCharacteristics.LENS_FACING_BACK){
                     continue;
                 }
                 StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
