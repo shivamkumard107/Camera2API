@@ -14,14 +14,21 @@
 
     <ImageButton
         android:id="@+id/videoOnlineImageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/circle"
+        android:contentDescription="@string/video_button" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="49dp"
-        android:layout_marginBottom="36dp"
-        android:contentDescription="@string/video_button"
-        android:src="@mipmap/btn_video_online" />
-
-
+        android:layout_margin="20dp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_dark" />
 </RelativeLayout>
