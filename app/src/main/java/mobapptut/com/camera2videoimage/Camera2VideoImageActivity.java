@@ -14,6 +14,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -163,6 +165,20 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera2_video_image);
         imageView = findViewById(R.id.imageView);
         createVideoFolder();
+        TextView fiveSecTV = findViewById(R.id.fiveSecTV);
+
+        CountDownTimer fiveSecTimer = new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long l) {
+                fiveSecTV.setText(Integer.toString((int) (l/1000)));
+            }
+
+            @Override
+            public void onFinish() {
+                mRecordImageButton.setEnabled(true);
+                checkWriteStoragePermission();
+            }
+        };
 
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
         mTextureView = (TextureView) findViewById(R.id.textureView);
@@ -177,11 +193,13 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                     mIsRecording = false;
                     mRecordImageButton.setBackground(getDrawable(R.drawable.rec_start));
                     imageView.setVisibility(View.GONE);
+                    mChronometer.setVisibility(View.GONE);
                     mMediaRecorder.stop();
                     mMediaRecorder.reset();
                     // startPreview();
                 } else {
-                    checkWriteStoragePermission();
+                    fiveSecTimer.start();
+                    mRecordImageButton.setEnabled(false);
                 }
             }
         });
