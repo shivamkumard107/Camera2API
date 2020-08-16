@@ -7,4 +7,5 @@
     <string name="msg_timer_info">Stare at dot to get accurate result</string>
     <string name="_00_00">00:00</string>
     <string name="logout">logout</string>
+    <string name="instructions" >1. Place the phone at a stationary place \n2. Try not to move your head at the start of recording \n3. Concentrate on the red dot on candle  \n4. Background light should not be too much to make your face invisible in Camera \n5. Eyes should be properly visible in the camera</string>
 </resources>

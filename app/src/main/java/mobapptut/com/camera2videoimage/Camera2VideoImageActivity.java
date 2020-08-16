@@ -1,8 +1,10 @@
 package mobapptut.com.camera2videoimage;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
@@ -195,6 +197,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         btLogout = findViewById(R.id.btLogout);
         viewDot = findViewById(R.id.viewDot);
         ivTimer = findViewById(R.id.ivTimer);
+        showDialog(getString(R.string.instructions));
         ivTimer.setOnClickListener(v -> {
             getTimePickerDialog();
         });
@@ -250,8 +253,17 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        getTimePickerDialog();
+    private void showDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setTitle("Instructions")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    getTimePickerDialog();
+                });
+        builder.show();
     }
 
     @Override
