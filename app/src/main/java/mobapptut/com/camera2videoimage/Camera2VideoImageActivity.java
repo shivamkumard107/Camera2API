@@ -1,6 +1,7 @@
 package mobapptut.com.camera2videoimage;
 
 import android.Manifest;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
@@ -28,6 +29,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -158,6 +160,26 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
             return choices[0];
         }
     }
+    private int mHour = 0, mMin = 0;
+
+    void getTimePickerDialog(){
+        int hour = 0;
+        int min = 0;
+        TimePickerDialog pickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                mHour = i;
+                mMin = i1;
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Timer set for " + i +" hour and " +i1 +" minutes",
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        }, hour, min, true);
+        pickerDialog.setTitle("Select Time to meditate");
+        pickerDialog.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +198,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mRecordImageButton.setEnabled(true);
+                fiveSecTV.setVisibility(View.GONE);
                 checkWriteStoragePermission();
             }
         };
@@ -199,10 +222,15 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                     // startPreview();
                 } else {
                     fiveSecTimer.start();
+                    fiveSecTV.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
+                    Glide.with(getBaseContext()).load(R.drawable.candle).into(imageView);
                     mRecordImageButton.setEnabled(false);
                 }
             }
         });
+
+        getTimePickerDialog();
     }
 
     @Override
@@ -445,8 +473,6 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                     == PackageManager.PERMISSION_GRANTED) {
                 mIsRecording = true;
                 mRecordImageButton.setBackground(ContextCompat.getDrawable(this, R.drawable.rec_stop));
-                imageView.setVisibility(View.VISIBLE);
-                Glide.with(this).load(R.drawable.candle).into(imageView);
                 try {
                     createVideoFileName();
                 } catch (IOException e) {
@@ -466,8 +492,6 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         } else {
             mIsRecording = true;
             mRecordImageButton.setBackground(getDrawable(R.drawable.rec_stop));
-            imageView.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.drawable.candle).into(imageView);
             try {
                 createVideoFileName();
             } catch (IOException e) {
