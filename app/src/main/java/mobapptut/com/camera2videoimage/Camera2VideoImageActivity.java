@@ -18,8 +18,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -27,7 +25,13 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +56,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
+    ImageView imageView;
     private TextureView mTextureView;
     private CameraDevice mCameraDevice;
     private HandlerThread mBackgroundHandlerThread;
@@ -60,14 +65,12 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
     private Size mPreviewSize;
     private Size mVideoSize;
     private MediaRecorder mMediaRecorder;
-        private Chronometer mChronometer;
+    private Chronometer mChronometer;
     private int mTotalRotation;
     private CameraCaptureSession mRecordCaptureSession;
     private CaptureRequest.Builder mCaptureRequestBuilder;
-
     private ImageButton mRecordImageButton;
     private boolean mIsRecording = false;
-
     private File mVideoFolder;
     private String mVideoFileName;
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
@@ -158,7 +161,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera2_video_image);
-
+        imageView = findViewById(R.id.imageView);
         createVideoFolder();
 
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
@@ -172,7 +175,8 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                     mChronometer.stop();
 //                    mChronometer.setVisibility(View.INVISIBLE);
                     mIsRecording = false;
-                    mRecordImageButton.setBackground(getDrawable(R.drawable.circle));
+                    mRecordImageButton.setBackground(getDrawable(R.drawable.rec_start));
+                    imageView.setVisibility(View.GONE);
                     mMediaRecorder.stop();
                     mMediaRecorder.reset();
                     // startPreview();
@@ -209,7 +213,9 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mIsRecording = true;
-                mRecordImageButton.setBackground(getDrawable(R.drawable.ic_pause_circle));
+                mRecordImageButton.setBackground(getDrawable(R.drawable.rec_stop));
+                imageView.setVisibility(View.VISIBLE);
+                Glide.with(this).load(R.drawable.candle).into(imageView);
                 Toast.makeText(this,
                         "Permission successfully granted!", Toast.LENGTH_SHORT).show();
             } else {
@@ -420,7 +426,9 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 mIsRecording = true;
-                mRecordImageButton.setBackground(getDrawable(R.drawable.ic_pause_circle));
+                mRecordImageButton.setBackground(ContextCompat.getDrawable(this, R.drawable.rec_stop));
+                imageView.setVisibility(View.VISIBLE);
+                Glide.with(this).load(R.drawable.candle).into(imageView);
                 try {
                     createVideoFileName();
                 } catch (IOException e) {
@@ -439,7 +447,9 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
             }
         } else {
             mIsRecording = true;
-            mRecordImageButton.setBackground(getDrawable(R.drawable.ic_pause_circle));
+            mRecordImageButton.setBackground(getDrawable(R.drawable.rec_stop));
+            imageView.setVisibility(View.VISIBLE);
+            Glide.with(this).load(R.drawable.candle).into(imageView);
             try {
                 createVideoFileName();
             } catch (IOException e) {

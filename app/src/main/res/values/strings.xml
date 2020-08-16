@@ -2,4 +2,8 @@
     <string name="app_name">Camera2 Video Image</string>
     <string name="video_button">Video Record Button</string>
     <string name="camera_button">Camera Capture Button</string>
+    <string name="msg_candle_focus" translatable="false">Don\'t move your head and focus on candle</string>
+    <string name="msg_tap_start">Adjust your eyes and tap to start</string>
+    <string name="msg_timer_info">Stare at dot to get accurate result</string>
+    <string name="_00_00">00:00</string>
 </resources>
