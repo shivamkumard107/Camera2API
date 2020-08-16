@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
@@ -17,6 +16,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <Button
+        android:id="@+id/btLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/logout"
+        app:layout_constraintBottom_toBottomOf="@+id/videoOnlineImageButton"
+        app:layout_constraintEnd_toEndOf="@+id/textureView"
+        app:layout_constraintStart_toEndOf="@+id/videoOnlineImageButton"
+        app:layout_constraintTop_toTopOf="@+id/videoOnlineImageButton" />
+
+    <View
+        android:id="@+id/viewDot"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@android:color/holo_red_light"
+        android:elevation="2dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="20sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivTimer"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="20sp"
+        android:src="@drawable/ic_stopwatch"
+        app:layout_constraintBottom_toBottomOf="@+id/videoOnlineImageButton"
+        app:layout_constraintEnd_toStartOf="@+id/videoOnlineImageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/videoOnlineImageButton" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
@@ -28,6 +64,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+
 
     <ImageButton
         android:id="@+id/videoOnlineImageButton"
@@ -71,12 +109,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
+        android:textColor="@android:color/holo_red_dark"
         android:textSize="64sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@android:color/holo_red_dark"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

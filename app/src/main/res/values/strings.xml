@@ -6,4 +6,5 @@
     <string name="msg_tap_start">Adjust your eyes and tap to start</string>
     <string name="msg_timer_info">Stare at dot to get accurate result</string>
     <string name="_00_00">00:00</string>
+    <string name="logout">logout</string>
 </resources>

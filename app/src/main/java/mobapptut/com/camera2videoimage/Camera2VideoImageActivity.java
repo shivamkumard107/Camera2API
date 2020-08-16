@@ -3,6 +3,7 @@ package mobapptut.com.camera2videoimage;
 import android.Manifest;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -25,6 +26,7 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +63,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         ORIENTATIONS.append(Surface.ROTATION_270, 270);
     }
 
+    ImageView ivTimer;
     ImageView imageView;
     private TextureView mTextureView;
     private CameraDevice mCameraDevice;
@@ -139,6 +143,9 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
 
         }
     };
+    private int mHour = 0, mMin = 0;
+    private Button btLogout;
+    private View viewDot;
 
     private static int sensorToDeviceRotation(CameraCharacteristics cameraCharacteristics, int deviceOrientation) {
         int sensorOrienatation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
@@ -160,9 +167,8 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
             return choices[0];
         }
     }
-    private int mHour = 0, mMin = 0;
 
-    void getTimePickerDialog(){
+    void getTimePickerDialog() {
         int hour = 0;
         int min = 0;
         TimePickerDialog pickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
@@ -172,7 +178,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                 mMin = i1;
                 Toast.makeText(
                         getApplicationContext(),
-                        "Timer set for " + i +" hour and " +i1 +" minutes",
+                        "Timer set for " + i + " hour and " + i1 + " minutes",
                         Toast.LENGTH_LONG
                 ).show();
             }
@@ -186,13 +192,24 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera2_video_image);
         imageView = findViewById(R.id.imageView);
+        btLogout = findViewById(R.id.btLogout);
+        viewDot = findViewById(R.id.viewDot);
+        ivTimer = findViewById(R.id.ivTimer);
+        ivTimer.setOnClickListener(v -> {
+            getTimePickerDialog();
+        });
+        btLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            finish();
+        });
         createVideoFolder();
         TextView fiveSecTV = findViewById(R.id.fiveSecTV);
 
         CountDownTimer fiveSecTimer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long l) {
-                fiveSecTV.setText(Integer.toString((int) (l/1000)));
+                fiveSecTV.setText(Integer.toString((int) (l / 1000)));
             }
 
             @Override
@@ -216,15 +233,19 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                     mIsRecording = false;
                     mRecordImageButton.setBackground(getDrawable(R.drawable.rec_start));
                     imageView.setVisibility(View.GONE);
+                    viewDot.setVisibility(View.GONE);
+                    btLogout.setVisibility(View.VISIBLE);
                     mChronometer.setVisibility(View.GONE);
                     mMediaRecorder.stop();
                     mMediaRecorder.reset();
                     // startPreview();
                 } else {
                     fiveSecTimer.start();
+                    btLogout.setVisibility(View.GONE);
                     fiveSecTV.setVisibility(View.VISIBLE);
                     imageView.setVisibility(View.VISIBLE);
                     Glide.with(getBaseContext()).load(R.drawable.candle).into(imageView);
+                    viewDot.setVisibility(View.VISIBLE);
                     mRecordImageButton.setEnabled(false);
                 }
             }
@@ -261,7 +282,9 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                 mIsRecording = true;
                 mRecordImageButton.setBackground(getDrawable(R.drawable.rec_stop));
                 imageView.setVisibility(View.VISIBLE);
+                btLogout.setVisibility(View.GONE);
                 Glide.with(this).load(R.drawable.candle).into(imageView);
+                viewDot.setVisibility(View.VISIBLE);
                 Toast.makeText(this,
                         "Permission successfully granted!", Toast.LENGTH_SHORT).show();
             } else {
@@ -473,6 +496,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
                     == PackageManager.PERMISSION_GRANTED) {
                 mIsRecording = true;
                 mRecordImageButton.setBackground(ContextCompat.getDrawable(this, R.drawable.rec_stop));
+                btLogout.setVisibility(View.GONE);
                 try {
                     createVideoFileName();
                 } catch (IOException e) {
@@ -492,6 +516,7 @@ public class Camera2VideoImageActivity extends AppCompatActivity {
         } else {
             mIsRecording = true;
             mRecordImageButton.setBackground(getDrawable(R.drawable.rec_stop));
+            btLogout.setVisibility(View.GONE);
             try {
                 createVideoFileName();
             } catch (IOException e) {
