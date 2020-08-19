@@ -3,19 +3,15 @@ package mobapptut.com.camera2videoimage
 
 import android.app.ProgressDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -49,23 +45,21 @@ class SignUpActivity : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val authResult = mAuth.createUserWithEmailAndPassword(emailStr, passStr).await()
-                if(authResult.user != null){
-                    withContext(Dispatchers.Main){
-                        Intent(this@SignUpActivity, Camera2VideoImageActivity::class.java).also {
-                            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(it)
-                        }
+        try {
+            val authResult = mAuth.createUserWithEmailAndPassword(emailStr, passStr).addOnCompleteListener(this) { it ->
+                if (it.isSuccessful) {
+                    Intent(this@SignUpActivity, Camera2VideoImageActivity::class.java).also {
+                        it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(it)
                     }
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main){
+                } else {
+                    Toast.makeText(this, "Already Registered!", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
-                    showDialog("Error : ${e.message}")
                 }
             }
+        } catch (e: Exception) {
+            dialog.dismiss()
+            showDialog("Error : ${e.message}")
         }
     }
 

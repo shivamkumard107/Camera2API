@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Candle Focus</string>
+    <string name="app_name">CandleFocus2</string>
     <string name="video_button">Video Record Button</string>
     <string name="camera_button">Camera Capture Button</string>
     <string name="msg_candle_focus" translatable="false">Don\'t move your head and focus on candle</string>
